@@ -1,5 +1,3 @@
-include("testing_mesh.jl")
-
 function build_den_sfc(G::Dict{Int64, Vector{Int64}}, num_p::Int64)
     partition_sfc = Dict(i => Vector{Int64}() for i in 1:num_p)
     lookups = Dict(i => -1 for i in 1:length(G))

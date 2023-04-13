@@ -1,5 +1,5 @@
 module LocalFennelPartitioning
-
-# Write your package code here.
+    export local_fennel
+    include("local_fennel.jl")
 
 end

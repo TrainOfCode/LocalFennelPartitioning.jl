@@ -121,3 +121,6 @@ function local_fennel(G::Dict{Int64, Vector{Int64}}, locations::Dict{Int64, Vect
     end
     return partitions, lookups
 end
+
+
+export local_fennel
