@@ -1,6 +1,6 @@
 include("sfc_den.jl")
 
-function get_order(G::Dict{Int64, Vector{Int64}})
+function get_order(G::Vector{Vector{Int}})
     ord = [-1 for i in 1:length(G)]
     visited = [false for i in 1:length(G)]
 
@@ -24,7 +24,7 @@ function get_order(G::Dict{Int64, Vector{Int64}})
     return ord
 end
 
-function distance(curr_node::Vector{Float64}, cent::Vector{Float64})
+function distance(curr_node::Array{Float64}, cent::Vector{Float64})
     return sum([c*c for c in curr_node - cent])^(0.5)
 end
 
@@ -58,18 +58,19 @@ function g_local(all_cand, curr_cand_to_add_node, partition_edges, alpha, gamma,
     return sum
 end
 
-function local_fennel(G::Dict{Int64, Vector{Int64}}, locations::Dict{Int64, Vector{Float64}}, num_p::Int64, alpha::Float64, gamma::Float64, to_cons::Int64)
-    partitions = Dict(i => Vector{Int64}() for i in 1:num_p)
-    lookups = Dict(i => -1 for i in 1:length(G))
+function local_fennel(G::Vector{Vector{Int}}, locations::Matrix{Float64}, num_p::Int64, alpha::Float64, gamma::Float64, to_cons::Int64)
+    partitions = [Vector{Int}() for i in 1:num_p]
+    lookups = fill(-1, length(G))
     partition_edges = Dict(i => Dict("len" => 0, "inside" => 0) for i in 1:num_p)
 
+    dim = size(locations)[2]
     den_sfc_parts, den_sfc_lookups = build_den_sfc(G, num_p)
     centers = Dict(i => Vector{Float64}() for i in 1:num_p)
 
     for (i, part) in den_sfc_parts
-        curr_center = [0 for i in 1:length(locations[1])]
+        curr_center = [0 for i in 1:dim]
         for entr in part
-            curr_center += locations[entr]
+            curr_center += locations[entr, 1:dim]
         end
 
         centers[i] = curr_center/length(part)
@@ -89,7 +90,7 @@ function local_fennel(G::Dict{Int64, Vector{Int64}}, locations::Dict{Int64, Vect
         end
 
         cand = Vector{Float64}()
-        distances_to_centers = find_distances(locations[curr_node], centers)
+        distances_to_centers = find_distances(locations[curr_node, 1:dim], centers)
 
         for i in 1:to_cons
             min_dist = minimum([dist for (p, dist) in distances_to_centers if p ∉ cand])
@@ -116,11 +117,8 @@ function local_fennel(G::Dict{Int64, Vector{Int64}}, locations::Dict{Int64, Vect
         end
 
         if (partition_edges[choice]["len"] > threshold_update_centers)
-            centers[choice] = (centers[choice] * (partition_edges[choice]["len"] - 1) + locations[curr_node]) / partition_edges[choice]["len"]
+            centers[choice] = (centers[choice] * (partition_edges[choice]["len"] - 1) + locations[curr_node, 1:dim]) / partition_edges[choice]["len"]
         end
     end
     return partitions, lookups
 end
-
-
-export local_fennel
