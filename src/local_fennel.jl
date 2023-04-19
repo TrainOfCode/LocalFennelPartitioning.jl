@@ -127,7 +127,7 @@ function local_fennel_sim(G::Vector{Vector{Int}}, locations::Matrix{Float64}, nu
 
     gamma = 2.0
     num_edges = sum([length(val) for val in G])
-    alpha = 0.5 * num_edges * ((num_partitions^(gamma - 1)) / (num_edges^(gamma)))
+    alpha = 0.5 * num_edges * ((num_p^(gamma - 1)) / (num_edges^(gamma)))
 
     to_cons = 5
     if num_p < 5
