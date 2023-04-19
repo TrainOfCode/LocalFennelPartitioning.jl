@@ -4,7 +4,7 @@ function get_order(G::Vector{Vector{Int}})
     ord = [-1 for i in 1:length(G)]
     visited = [false for i in 1:length(G)]
 
-    S = Vector{Int64}()
+    S = Vector{Int}()
     push!(S, 2)
     place = 1
 
@@ -28,8 +28,8 @@ function distance(curr_node::Array{Float64}, cent::Vector{Float64})
     return sum([c*c for c in curr_node - cent])^(0.5)
 end
 
-function find_distances(curr_node::Vector{Float64}, centers::Dict{Int64, Vector{Float64}})
-    dist = Dict{Int64, Float64}()
+function find_distances(curr_node::Vector{Float64}, centers::Dict{Int, Vector{Float64}})
+    dist = Dict{Int, Float64}()
     for (i, cent) in centers
         dist[i] = distance(curr_node, cent)
     end
@@ -58,7 +58,7 @@ function g_local(all_cand, curr_cand_to_add_node, partition_edges, alpha, gamma,
     return sum
 end
 
-function local_fennel(G::Vector{Vector{Int}}, locations::Matrix{Float64}, num_p::Int64, alpha::Float64, gamma::Float64, to_cons::Int64)
+function local_fennel(G::Vector{Vector{Int}}, locations::Matrix{Float64}, num_p::Int, alpha::Float64, gamma::Float64, to_cons::Int)
     partitions = [Vector{Int}() for i in 1:num_p]
     lookups = fill(-1, length(G))
     partition_edges = Dict(i => Dict("len" => 0, "inside" => 0) for i in 1:num_p)
@@ -82,7 +82,7 @@ function local_fennel(G::Vector{Vector{Int}}, locations::Matrix{Float64}, num_p:
     for curr_node in order
         neighbors = G[curr_node]
 
-        neighbor_lookup = Dict{Int64, Int64}()
+        neighbor_lookup = Dict{Int, Int}()
         for neigh in neighbors
             if lookups[neigh] != -1
                 neighbor_lookup[neigh] = lookups[neigh]
@@ -97,7 +97,7 @@ function local_fennel(G::Vector{Vector{Int}}, locations::Matrix{Float64}, num_p:
             push!(cand, [p for (p, dist) in distances_to_centers if dist == min_dist][1])
         end
 
-        g_score = Dict{Int64, Float64}()
+        g_score = Dict{Int, Float64}()
         for can in cand
             # g_local(cand, i, partition_edges, alpha, gamma, cand_part_i[i], neighbor_lookup, cand_part_i);
             g_score[can] = g_local(cand, can, partition_edges, alpha, gamma, neighbor_lookup)
@@ -123,14 +123,14 @@ function local_fennel(G::Vector{Vector{Int}}, locations::Matrix{Float64}, num_p:
     return partitions, lookups
 end
 
-function local_fennel_sim(G::Vector{Vector{Int}}, locations::Matrix{Float64}, num_p::Int64)
+function local_fennel_sim(G::Vector{Vector{Int}}, locations::Matrix{Float64}, num_p::Int)
 
     gamma = 2.0
     num_edges = sum([length(val) for val in G])
     alpha = 0.5 * num_edges * ((num_partitions^(gamma - 1)) / (num_edges^(gamma)))
 
-    to_cons = 8
-    if num_p < 8
+    to_cons = 5
+    if num_p < 5
         to_cons = num_p
     return local_fennel(G, locations, num_p, alpha, gamma, to_cons)
 end
