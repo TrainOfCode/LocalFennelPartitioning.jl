@@ -13,11 +13,13 @@ and
 local_fennel_sim(G::Vector{Vector{Int}}, locations::Matrix{Float64}, num_p::Int)
 ```
 
-In `local_fennel_sim`; `alpha`, `gamma`, and `to_cons` are calculated internally
+In `local_fennel_sim`; `alpha`, `gamma`, and `to_cons` are calculated internally, and then it calls local_fennel
 
-The two functions partition G using a modified version very similar to the Fennel Algorithm, producing the following
+Local Fennel is based off of the streaming partitioning algorithm that goes by the name Fennel, I have modified it for my own purposes, and is available here
 
 ```
 => (partitions: Vector{Vector{Int}}, lookups:Vector{Int})
   where for node i ∈ Vertices(G), node i has been assigned to the partition number lookups[i], and likewise i ∈ partitions[lookups[i]]
 ```
+
+Fennel Algorithm: Charalampos Tsourakakis, Christos Gkantsidis, Bozidar Radunovic, and Milan Vojnovic. 2014. FENNEL: streaming graph partitioning for massive scale graphs. In Proceedings of the 7th ACM international conference on Web search and data mining (WSDM '14). Association for Computing Machinery, New York, NY, USA, 333–342. https://doi.org/10.1145/2556195.2556213
