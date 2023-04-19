@@ -122,3 +122,15 @@ function local_fennel(G::Vector{Vector{Int}}, locations::Matrix{Float64}, num_p:
     end
     return partitions, lookups
 end
+
+function local_fennel_sim(G::Vector{Vector{Int}}, locations::Matrix{Float64}, num_p::Int64)
+
+    gamma = 2.0
+    num_edges = sum([length(val) for val in G])
+    alpha = 0.5 * num_edges * ((num_partitions^(gamma - 1)) / (num_edges^(gamma)))
+
+    to_cons = 8
+    if num_p < 8
+        to_cons = num_p
+    return local_fennel(G, locations, num_p, alpha, gamma, to_cons)
+end
