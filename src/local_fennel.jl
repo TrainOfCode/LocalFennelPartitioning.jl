@@ -132,5 +132,6 @@ function local_fennel_sim(G::Vector{Vector{Int}}, locations::Matrix{Float64}, nu
     to_cons = 5
     if num_p < 5
         to_cons = num_p
+    end
     return local_fennel(G, locations, num_p, alpha, gamma, to_cons)
 end
