@@ -17,6 +17,8 @@ In `local_fennel_sim`; `alpha`, `gamma`, and `to_cons` are calculated internally
 
 Local Fennel is based off of the streaming partitioning algorithm that goes by the name Fennel, I have modified it for my own purposes, and is available here
 
+Both functions produce the following
+
 ```
 => (partitions: Vector{Vector{Int}}, lookups:Vector{Int})
   where for node i ∈ Vertices(G), node i has been assigned to the partition number lookups[i], and likewise i ∈ partitions[lookups[i]]
