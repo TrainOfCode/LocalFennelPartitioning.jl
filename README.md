@@ -21,7 +21,8 @@ Both functions produce the following
 
 ```
 => (partitions: Vector{Vector{Int}}, lookups:Vector{Int})
-  where for node i ∈ Vertices(G), node i has been assigned to the partition number lookups[i], and likewise i ∈ partitions[lookups[i]]
 ```
+
+where for node i ∈ Vertices(G), node i has been assigned to the partition number lookups[i], and likewise i ∈ partitions[lookups[i]]
 
 Fennel Algorithm: Charalampos Tsourakakis, Christos Gkantsidis, Bozidar Radunovic, and Milan Vojnovic. 2014. FENNEL: streaming graph partitioning for massive scale graphs. In Proceedings of the 7th ACM international conference on Web search and data mining (WSDM '14). Association for Computing Machinery, New York, NY, USA, 333–342. https://doi.org/10.1145/2556195.2556213
